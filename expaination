@@ -1,0 +1,158 @@
+
+Once upon a time, in the mystical kingdom of Pylandia, a curious and daring programmer named Lily embarked on a quest to create her own version of an enchanting slot machine. Let's dive into the story and explain each line of code that Lily used to bring her magical creation to life.
+
+import random  # importing the random library
+
+In the land of Pythonia, Lily invoked the powers of the "random" library, which allowed her to introduce the element of chance and randomness to her slot machine.
+
+MAX_LINES = 3  # constants in python must be written using uppercase letters even though it's not compulsory
+MAX_BET = 10000
+MIN_BET = 1
+
+With the aid of magical constants, Lily set the rules for her game. She established that players could bet on a maximum of three lines, and the bets could range from the minimum of 1 to the maximum of 10,000.
+
+ROWS = 3
+COLS = 3
+
+In the realm of Pylandia's slot machine, the grid consisted of 3 rows and 3 columns, creating a magical playground where the symbols would dance.
+
+symbol_count = {
+    "A": 3,
+    "B": 4,
+    "C": 6,
+    "D": 8
+}
+
+Lily envisioned the mystical symbols that would grace the reels. She assigned a count to each symbol, declaring that "A" would appear thrice, "B" four times, "C" six times, and "D" eight times.
+
+symbol_value = {
+    "A": 10,
+    "B": 4,
+    "C": 3,
+    "D": 2
+}
+
+The true essence of the slot machine lay in the value of the symbols. Lily bestowed upon each symbol its worth - "A" was valued at 10, "B" had 4, "C" was worth 3, and "D" carried the modest value of 2.
+
+def check_winnings(columns, lines, bet, values):
+    winnings = 0
+    winning_lines = []
+    for line in range(lines):
+        symbol = columns[0][line]
+        for column in columns:
+            symbol_to_check = column[line]
+            if symbol != symbol_to_check:
+                break
+        else:
+            winnings += values[symbol] * bet * 50
+            winning_lines.append(line + 1)  # +1 to convert 0-based index to line number
+    return winnings, winning_lines
+
+With her coding prowess, Lily designed the mystical "check_winnings" function. This magical function examined the reels and lines to uncover the secret combination of symbols that could bring immense wealth. If three identical symbols appeared consecutively on any line, a win was declared. The fortunate player's reward was then multiplied by their bet and further multiplied by 50, as a generous bonus from the slot machine. The function returned the total winnings and the lucky lines where the stars had aligned.
+
+def get_slot_machine_spin(rows, cols):
+    all_symbols = []
+    for symbol, count in symbol_count.items():
+        for _ in range(count):
+            all_symbols.append(symbol)
+
+    columns = []
+    for _ in range(cols):
+        column = []
+        current_symbols = all_symbols[:]
+        for _ in range(rows):
+            value = random.choice(current_symbols)
+            current_symbols.remove(value)
+            column.append(value)
+        columns.append(column)
+    return columns
+
+    To breathe life into the slot machine, Lily conjured the magical "get_slot_machine_spin" function. It crafted a spellbinding array of symbols, ensuring that each spin was unique. The function filled the columns with random symbols, removing them as they appeared to avoid repetition. The enchanting result was a magical grid of symbols that would captivate the players' hearts.
+
+    def print_slot_machine(columns):
+    for row in range(len(columns[0])):
+        for i, column in enumerate(columns):
+            if i != len(columns) - 1:
+                print(column[row], " | ", end="")
+            else:
+                print(column[row])
+
+
+In this grand casino, a sight to behold was the wondrous "print_slot_machine" function. It displayed the magical grid, where symbols danced side by side on the reels. Lily's code conjured the mesmerizing visual of the slot machine, enchanting players with its allure.
+
+def deposit():
+    while True:
+        amount = input("What would you like to deposit? $")
+        if amount.isdigit():
+            amount = int(amount)
+            if amount > 0:
+                break
+            else:
+                print("Amount must be greater than zero.")
+        else:
+            print("Please enter a number")
+    return amount
+
+To welcome adventurers to her casino, Lily crafted the mystical "deposit" function. It offered players the chance to enter the realm of Pylandia with their initial treasure. Players could deposit an amount greater than zero, setting the stage for their epic quests.
+
+def get_number_of_lines():
+    while True:
+        lines = input("Enter the number of lines to bet on (1-" + str(MAX_LINES) + ")? ")
+        if lines.isdigit():
+            lines = int(lines)
+            if 1 <= lines <= MAX_LINES:
+                break
+            else:
+                print("Enter a valid number of lines.")
+        else:
+            print("Please enter a digit")
+    return lines
+
+To guide players on their path to riches, Lily conjured the magical "get_number_of_lines" function. It asked players to choose how many lines they would bet on, ranging from one to the maximum of three. The function ensured that players embarked on their quests wisely.
+
+def get_bet():
+    while True:
+        bet = input("What would you like to bet on each line? $")
+        if bet.isdigit():
+            bet = int(bet)
+            if MIN_BET <= bet <= MAX_BET:
+                break
+            else:
+                print(f"Amount must be between ${MIN_BET}-${MAX_BET}")
+        else:
+            print("Please enter a number")
+    return bet
+
+The power to shape their destinies was bestowed upon players through the "get_bet" function. As players set their bets, Lily's code ensured that the amounts were within the magical bounds of the minimum and maximum limits. This allowed players to choose their fate with thoughtful wagers.
+
+def spin(balance):
+    lines = get_number_of_lines()
+    while True:
+        bet = get_bet()
+        total_amount = bet * lines
+        if total_amount > balance:
+            print("Insufficient balance to bet. Please deposit some more amount.")
+        else:
+            break
+    
+    print(f"Your bet is ${bet} on {lines} lines hence total bet is ${total_amount}")
+    
+    slots = get_slot_machine_spin(ROWS, COLS)
+    print_slot_machine
+
+def main():
+    balance = deposit()
+    while True:
+        print(f"Current Balance is ${balance}")
+
+        answer = input("Press enter to play (q to quit).")
+        if answer == "q":
+            break
+        balance += spin(balance)
+
+    print(f"You left with ${balance}")
+
+main()
+
+
+
